@@ -32,21 +32,21 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <h2>Recent Scans</h2>
+    <h2>Recent Scan Logs</h2>
     <table>
       <thead>
         <tr>
           <th>Time</th>
-          <th>Book Title</th>
-          <th>Location</th>
+          <th>Asset Name</th>
+          <th>Room / Zone</th>
           <th>Tag ID (EPC)</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="event in events" :key="event.id">
           <td>{{ new Date(event.timestamp).toLocaleString() }}</td>
-          <td><strong>{{ event.title || 'Unknown Book' }}</strong></td>
-          <td>{{ event.reader_name }}</td>
+          <td><strong>{{ event.name || 'Unknown Asset' }}</strong></td>
+          <td>{{ event.room || '—' }}</td>
           <td class="epc-col">{{ event.epc }}</td>
         </tr>
       </tbody>
@@ -62,7 +62,7 @@ onUnmounted(() => {
 
   table {
     margin: 0 auto; 
-    width: 80%;
+    width: 90%;
     border-collapse: collapse;
     background-color: white;
     color: black;

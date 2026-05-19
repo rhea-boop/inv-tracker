@@ -2,26 +2,26 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { io } from 'socket.io-client'
 
-const books = ref([])
+const assets = ref([])
 let socket;
 
-const fetchBooks = async () => {
+const fetchAssets = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/books')
-    books.value = await response.json()
+    const response = await fetch('http://localhost:3000/api/assets')
+    assets.value = await response.json()
   } catch (error) {
-    console.error('Error fetching books:', error)
+    console.error('Error fetching assets:', error)
   }
 }
 
 onMounted(() => {
-  fetchBooks() // Initial load
+  fetchAssets() // Initial load
   
   // Connect to the Socket server and listen for updates
   socket = io('http://localhost:3000')
   socket.on('new_scan_event', () => {
     console.log("Live update received! Refreshing table...")
-    fetchBooks()
+    fetchAssets()
   })
 })
 
@@ -32,28 +32,28 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <h2>Library Inventory</h2>
+    <h2>Office Inventory (Πάγια)</h2>
     <table>
       <thead>
         <tr>
           <th>EPC (Tag ID)</th>
-          <th>Title</th>
-          <th>Author</th>
+          <th>Asset Name</th>
+          <th>Room / Zone</th>
           <th>Status</th>
           <th>Last Seen</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="book in books" :key="book.id">
-          <td>{{ book.epc }}</td>
-          <td>{{ book.title }}</td>
-          <td>{{ book.author || '—' }}</td>
+        <tr v-for="asset in assets" :key="asset.id">
+          <td>{{ asset.epc }}</td>
+          <td>{{ asset.name || 'Unknown Asset' }}</td>
+          <td>{{ asset.room || '—' }}</td>
           <td>
-            <span :class="{'status-in': book.status === 'IN', 'status-out': book.status === 'OUT'}">
-              {{ book.status }}
+            <span :class="{'status-present': asset.status === 'PRESENT', 'status-missing': asset.status === 'MISSING'}">
+              {{ asset.status }}
             </span>
           </td>
-          <td>{{ new Date(book.last_seen).toLocaleString() }}</td>
+          <td>{{ new Date(asset.last_seen).toLocaleString() }}</td>
         </tr>
       </tbody>
     </table>
@@ -68,7 +68,7 @@ onUnmounted(() => {
 
   table {
     margin: 0 auto; 
-    width: 80%;
+    width: 90%;
     border-collapse: collapse;
     background-color: white;
     color: black;
@@ -94,12 +94,12 @@ onUnmounted(() => {
     background-color: rgb(245, 243, 243);
   }
 
-  .status-in {
+  .status-present {
     color: green;
     font-weight: bold;
   }
   
-  .status-out {
+  .status-missing {
     color: red;
     font-weight: bold;
   }
