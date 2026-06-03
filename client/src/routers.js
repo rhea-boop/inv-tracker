@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Events from './components/Events.vue'
-import Books from './components/Books.vue'
+import Books from './components/Assets.vue'
 
 const routes = [
   { path: '/', redirect: '/events' }, 
