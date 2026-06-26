@@ -7,7 +7,7 @@ let socket;
 
 const fetchEvents = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/events')
+    const response = await fetch(`/api/events`)
     events.value = await response.json()
   } catch (error) {
     console.error('Error fetching events:', error)
@@ -18,7 +18,7 @@ onMounted(() => {
   fetchEvents() // Initial load
   
   // Connect to the Socket server and listen for updates
-  socket = io('http://localhost:3000')
+  socket = io()
   socket.on('new_scan_event', () => {
     console.log("Live update received! Refreshing log...")
     fetchEvents()

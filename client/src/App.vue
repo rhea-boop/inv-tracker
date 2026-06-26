@@ -6,7 +6,8 @@
   <nav>
     <div class="bar">
       <router-link to="/events" class="tabs">Track Books</router-link>
-      <router-link to="/books" class="tabs">All Books</router-link>
+      <router-link to="/assets" class="tabs">All Assets</router-link>
+      <router-link to="/search" class="tabs">Search</router-link>
     </div>
   </nav>
 
@@ -16,20 +17,19 @@
 </template>
 
 <style scoped>
-  nav
-  {
+  nav {
     background-color: rgb(186, 189, 189);
   }
 
-  .bar 
-  {
+  .bar {
     display: flex;
     width: 100%;
+    justify-content: center; /* Centers the whole group */
+    gap: 50px; /* Puts an exact 50px gap between each tab */
   }
 
-  .tabs 
-  {
-    margin-left: 29%;
+  .tabs {
+    /* margin-left: 29%;  <-- REMOVED THIS */
     cursor: pointer;
     font-weight: bold;
     font-size: larger;
@@ -38,19 +38,16 @@
     color: #333; 
   }
 
-  .tabs:hover 
-  {
+  .tabs:hover {
     color: rgb(80, 80, 80);
   }
 
-  .router-link-active 
-  {
+  .router-link-active {
     color: black;
     border-bottom: 3px solid rgb(35, 35, 36);
   }
 
-  .content 
-  {
+  .content {
     padding: 20px;
   }
 </style>

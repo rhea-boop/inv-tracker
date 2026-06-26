@@ -7,7 +7,7 @@ let socket;
 
 const fetchAssets = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/assets')
+    const response = await fetch(`/api/assets`)
     assets.value = await response.json()
   } catch (error) {
     console.error('Error fetching assets:', error)
@@ -18,7 +18,7 @@ onMounted(() => {
   fetchAssets() // Initial load
   
   // Connect to the Socket server and listen for updates
-  socket = io('http://localhost:3000')
+  socket = io()
   socket.on('new_scan_event', () => {
     console.log("Live update received! Refreshing table...")
     fetchAssets()

@@ -41,6 +41,38 @@ app.get('/api/events', async (req, res) => {
         res.status(500).json({ error: "Database error" });
     }
 });
+
+// Search for an asset by exact EPC or partial Name
+// Search for an asset by exact EPC or partial Name
+// Search for an asset by exact EPC or partial Name
+app.get('/api/search', async (req, res) => {
+    const q = req.query.q?.trim();
+    
+    // TRACER ROUND 1: Did the backend even hear the request?
+    console.log(`\n🔍 [BACKEND] Search requested for: "${q}"`); 
+
+    if (!q) {
+        console.log("⚠️ [BACKEND] Query was empty. Aborting.");
+        return res.json([]);
+    }
+
+    try {
+        const query = `
+            SELECT * FROM assets 
+            WHERE epc = ? OR name LIKE ? 
+            ORDER BY last_seen DESC
+        `;
+        const [rows] = await dbModule.getPool().query(query, [q, `%${q}%`]);
+        
+        // TRACER ROUND 2: Did the database find anything?
+        console.log(`✅ [BACKEND] Found ${rows.length} results in the database.`);
+        res.json(rows);
+        
+    } catch (err) {
+        console.error("❌ [BACKEND] Database crash:", err);
+        res.status(500).json({ error: "Database error" });
+    }
+});
 // --- END API ENDPOINTS ---
 
 async function startApp() {
